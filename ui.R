@@ -20,6 +20,7 @@ header <- dashboardHeader(
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Dashboard", tabName="dashboard", icon = icon("tachometer")),
+    menuItem("Map", tabName="map", icon = icon("map-marker")),
     menuItem("Data",tabName="help", icon = icon("table")),
     menuItem("About", tabName="source", icon = icon("info"))
   )
@@ -100,6 +101,7 @@ body <- dashboardBody(
 #               )
   )),
   ## About tab
+  tabItem(tabName="map"),
   tabItem(tabName ="help",
           fluidRow(
           column(width=12,
@@ -107,7 +109,7 @@ body <- dashboardBody(
                  p("Data source: Earthquake data downloaded from http://earthquake.usgs.gov/earthquakes/feed/v1.0/csv.php"),
                  box(title = 'Quake table', solidHeader=TRUE,
                      width = 12, collapsible=FALSE,
-                     dataTableOutput("quaketable")
+                     DT::dataTableOutput("quaketable")
                  )
           ))
   ),

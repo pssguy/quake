@@ -12,11 +12,12 @@ library(leaflet)
 library(dplyr)
 library(scales)
 require(ggplot2)
+library(DT)
 # require(htmltools)
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 #*     Read and prepare data
 #* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-quake.file <- "C:/Users/Lenovo/github/quake2/data/all_month_merged.csv"  
+quake.file <- "data/all_month_merged.csv"  
 quake <- read.csv(quake.file,
                   colClasses = c("character", "numeric", "numeric",
                                  "numeric", "numeric", "character",
@@ -52,7 +53,9 @@ function(input, output, session) {
   ##  get date range
   # this.date <- reactive(input$daterange)
   ## leaflet map
- qm <- leaflet(data=quake.sub) %>% addProviderTiles() %>%
+ qm <- leaflet(data=quake.sub) %>%
+   #addProviderTiles() %>%
+   addTiles() %>% 
    setView((80.000 + 88.183)/2, (25.767 + 30.450)/2,  zoom = 7) %>%
    addCircleMarkers(~longitude, ~latitude,
                     popup = pu,
@@ -133,5 +136,11 @@ function(input, output, session) {
  #update histogram
  output$quakeHist <- renderPlot(quakeHist())
  #update table
- output$quaketable <- renderDataTable(quake.sub[,c(5, 4, 3, 6, 8:10, 12:13)])
+ output$quaketable <- DT::renderDataTable({
+   print(glimpse(quake.sub))
+   
+   quake.sub[,c(5, 4, 3, 6, 8:10, 12:13)] %>% 
+     DT::datatable()
+   }
+   )
 }
